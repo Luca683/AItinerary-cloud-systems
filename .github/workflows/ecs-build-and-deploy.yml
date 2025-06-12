@@ -35,11 +35,9 @@ jobs:
           echo "WEBAPP_CHANGED=false" >> $GITHUB_ENV
           echo "OLLAMA_CHANGED=false" >> $GITHUB_ENV
 
-          # Fetch main branch for diff
-          git fetch origin main
-
-          WEBAPP_DIFF=$(git diff --name-only origin/main HEAD -- webapp/ | wc -l)
-          OLLAMA_DIFF=$(git diff --name-only origin/main HEAD -- ollama/ | wc -l)
+          # Check with the last commit
+          WEBAPP_DIFF=$(git diff --name-only HEAD^ -- webapp/ | wc -l)
+          OLLAMA_DIFF=$(git diff --name-only HEAD^ -- ollama/ | wc -l)
 
           if [ "$WEBAPP_DIFF" -gt 0 ]; then
             echo "WEBAPP_CHANGED=true" >> $GITHUB_ENV
