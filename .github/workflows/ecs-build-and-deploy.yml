@@ -73,34 +73,39 @@ jobs:
       - name: Update ECS task definition and service
         if: env.WEBAPP_CHANGED == 'true' || env.OLLAMA_CHANGED == 'true'
         run: |
-          # Ottieni la task definition attuale
-          aws ecs describe-task-definition --task-definition $TASK_FAMILY > taskdef.json
+          # Ottieni la task definition attuale e estrai solo l'oggetto 'taskDefinition'
+          # che contiene i dettagli che ci servono per la registrazione.
+          aws ecs describe-task-definition --task-definition $TASK_FAMILY | jq '.taskDefinition' > taskdef.json
 
           # Aggiorna l’immagine nella task definition solo per i container modificati
+          # L'operazione di aggiornamento avviene direttamente sull'oggetto task definition.
           if [ "$WEBAPP_CHANGED" == "true" ]; then
             echo "Updating webapp image in taskdef"
-            jq --arg IMAGE "$ECR_WEBAPP:latest" '.taskDefinition.containerDefinitions |= map(if .name=="webapp" then .image=$IMAGE else . end)' taskdef.json > taskdef-updated.json
+            jq --arg IMAGE "$ECR_WEBAPP:latest" '.containerDefinitions |= map(if .name=="webapp" then .image=$IMAGE else . end)' taskdef.json > taskdef-updated.json
             mv taskdef-updated.json taskdef.json
           fi
 
           if [ "$OLLAMA_CHANGED" == "true" ]; then
             echo "Updating ollama image in taskdef"
-            jq --arg IMAGE "$ECR_OLLAMA:latest" '.taskDefinition.containerDefinitions |= map(if .name=="ollama" then .image=$IMAGE else . end)' taskdef.json > taskdef-updated.json
+            jq --arg IMAGE "$ECR_OLLAMA:latest" '.containerDefinitions |= map(if .name=="ollama" then .image=$IMAGE else . end)' taskdef.json > taskdef-updated.json
             mv taskdef-updated.json taskdef.json
           fi
 
-          # Rimuovi campi non ammessi per register-task-definition
-          jq 'del(.taskDefinition.taskDefinitionArn, .taskDefinition.revision, .taskDefinition.status, .taskDefinition.requiresAttributes, .taskDefinition.compatibilities, .taskDefinition.registeredAt, .taskDefinition.registeredBy)' taskdef.json > new-taskdef.json
+          # Rimuovi i campi che non sono ammessi quando si registra una nuova task definition.
+          # Questi campi sono aggiunti da AWS quando la task definition viene registrata,
+          # ma non devono essere presenti in input.
+          jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' taskdef.json > new-taskdef.json
 
-          # Registra la nuova task definition
+          # Registra la nuova task definition utilizzando il JSON pulito.
           aws ecs register-task-definition --cli-input-json file://new-taskdef.json
 
-          # Aggiorna il servizio ECS per usare la nuova task definition
-          NEW_TASK_DEF_ARN=$(jq -r '.taskDefinition.taskDefinitionArn' new-taskdef.json)
+          # Ottieni l'ARN della nuova task definition appena registrata.
+          NEW_TASK_DEF_ARN=$(aws ecs describe-task-definition --task-definition $TASK_FAMILY --query 'taskDefinition.taskDefinitionArn' --output text)
 
+          # Aggiorna il servizio ECS per usare la nuova task definition.
           aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --task-definition $NEW_TASK_DEF_ARN
 
-          # Attendi che il servizio sia stabile (tutti i nuovi task RUNNING)
+          # Attendi che il servizio sia stabile (tutti i nuovi task RUNNING).
           echo "Waiting for ECS service to stabilize..."
           aws ecs wait services-stable --cluster $ECS_CLUSTER --services $ECS_SERVICE
           echo "✅ ECS service is now stable and all tasks are running."
