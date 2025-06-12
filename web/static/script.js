@@ -1,33 +1,33 @@
-//Recupero i riferimenti HTML
+// Recupero i riferimenti HTML
 const form = document.getElementById("itinerario-form");
 const loading = document.getElementById("loading");
 const risultato = document.getElementById("risultato");
 const rispostaLlm = document.getElementById("risposta-llm");
 
-// ✅ Carica la classifica al caricamento iniziale della pagina
+//✅ Carica la classifica al caricamento iniziale della pagina
 document.addEventListener("DOMContentLoaded", function () {
     getTopList();
 });
 
-//Quando l'utente clicca sul pulsante "Genera Itinerario" viene eseguita questa funzione
 form.addEventListener("submit", async function (e) {
-    e.preventDefault(); // evita il ricaricamento della pagina
+    e.preventDefault();
 
-    // Mostro spinner, nascondo risultato
     loading.style.display = "block";
     risultato.style.display = "none";
     rispostaLlm.textContent = "";
 
-    // Estraggo i valori inseriti dall'utente nel form
     const citta = document.getElementById("citta").value;
     const giorni = document.getElementById("giorni").value;
 
-    await update_database(citta); // lambda che aggiorna il DB delle città
-    await getTopList(); // lambda che restituisce la top 5 delle città più cercate
+    await updateDatabase(citta);
+    await getTopList();
 
+    await requestItinerary(citta, giorni);
+});
+
+async function requestItinerary(citta, giorni) {
     try {
-        //Invia una richiesta POST alla route / (gestita da flask), i dati vengono inviati nel body della richiesta in formato JSON
-        const response = await fetch("/", {
+        const response = await fetch("https://cfo26ew9sl.execute-api.us-east-1.amazonaws.com/prod/richiesta-itinerario", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -35,30 +35,47 @@ form.addEventListener("submit", async function (e) {
             body: JSON.stringify({ citta, giorni })
         });
 
-        // Se il server restituisce un errore HTTP (es. 404,500) => lancio un errore
-        if (!response.ok) {
-            throw new Error("Errore nella risposta del server");
-        }
+        if (!response.ok) throw new Error("Errore nel richiedere l'itinerario");
 
-        // Attendo la risposta dal server e la conservo in data in formato JSON
         const data = await response.json();
+        const requestId = data.request_id;
 
-        // Mostro la risposta
-        rispostaLlm.textContent = data.risposta || "Nessuna risposta ricevuta.";
-        risultato.style.display = "block";
+        const intervalId = setInterval(async () => {
+            try {
+                const resultResponse = await fetch(`https://cfo26ew9sl.execute-api.us-east-1.amazonaws.com/prod/risultato-itinerario?requestId=${requestId}`);
+                if (!resultResponse.ok) throw new Error("Errore nel recupero risultato");
+
+                const resultData = await resultResponse.json();
+
+                if (resultData.status === "completed") {
+                    clearInterval(intervalId);
+                    rispostaLlm.textContent = resultData.risposta || "Nessuna risposta.";
+                    risultato.style.display = "block";
+                    loading.style.display = "none";
+                } else if (resultData.status === "failed") {
+                    clearInterval(intervalId);
+                    rispostaLlm.textContent = "Errore nella generazione dell'itinerario.";
+                    risultato.style.display = "block";
+                    loading.style.display = "none";
+                }
+            } catch (err) {
+                clearInterval(intervalId);
+                rispostaLlm.textContent = "Errore durante il polling: " + err.message;
+                risultato.style.display = "block";
+                loading.style.display = "none";
+            }
+        }, 5000);
+
     } catch (err) {
-        // In caso di errore nella rete o nella risposta, mostro un messaggio di errore
         rispostaLlm.textContent = "Errore: " + err.message;
         risultato.style.display = "block";
-    } finally {
-        // Nascondo lo spinner di caricamento
         loading.style.display = "none";
     }
-});
+}
 
-async function update_database(citta) {
+async function updateDatabase(citta) {
     try {
-        const res = await fetch("https://u8pzmwc3j0.execute-api.us-east-1.amazonaws.com/prod/classifica", {
+        const res = await fetch("https://cfo26ew9sl.execute-api.us-east-1.amazonaws.com/prod/classifica", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -81,7 +98,7 @@ async function update_database(citta) {
 
 async function getTopList() {
     try {
-        const res = await fetch("https://u8pzmwc3j0.execute-api.us-east-1.amazonaws.com/prod/classifica");
+        const res = await fetch("https://cfo26ew9sl.execute-api.us-east-1.amazonaws.com/prod/classifica");
 
         if (!res.ok) {
             console.warn("Impossibile recuperare la classifica.");
