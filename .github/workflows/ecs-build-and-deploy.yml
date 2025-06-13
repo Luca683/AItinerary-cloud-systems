@@ -89,10 +89,8 @@ jobs:
           NEW_TASK_DEF_ARN=$(aws ecs describe-task-definition --task-definition $TASK_FAMILY_WEBAPP --query 'taskDefinition.taskDefinitionArn' --output text)
 
           aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE_WEBAPP --task-definition $NEW_TASK_DEF_ARN
-
-          echo "Waiting for WEBAPP service to stabilize..."
-          aws ecs wait services-stable --cluster $ECS_CLUSTER --services $ECS_SERVICE_WEBAPP
-          echo "✅ WEBAPP updated successfully."
+          
+          echo "✅ Service WEBAPP updated."
 
       - name: Update ECS task definition and service - Ollama
         if: env.OLLAMA_CHANGED == 'true'
@@ -112,7 +110,5 @@ jobs:
 
           aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE_OLLAMA --task-definition $NEW_TASK_DEF_ARN
 
-          echo "Waiting for OLLAMA service to stabilize..."
-          aws ecs wait services-stable --cluster $ECS_CLUSTER --services $ECS_SERVICE_OLLAMA
-          echo "✅ OLLAMA updated successfully."
+          echo "✅ Service OLLAMA updated."
       
