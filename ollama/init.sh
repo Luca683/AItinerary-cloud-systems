@@ -8,7 +8,7 @@ sleep 30
 
 # Se modello non è presente, scaricalo
 if ! ollama list | grep -q gemma3:1b; then
-  echo "Scarico modello gemma3:1b...."
+  echo "Scarico modello gemma3:1b..."
   ollama pull gemma3:1b
 fi
 
