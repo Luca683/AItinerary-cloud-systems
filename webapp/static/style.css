@@ -16,20 +16,19 @@ h1 {
 }
 
 .bg-image-left {
-    background-image: url("/static/images/city-left.jpg"); /* Sostituisci con il percorso della tua immagine */
+    background-image: url("/static/images/city-left.jpg"); 
     background-size: cover;
     background-position: center;
     height: 100vh;
 }
 
 .bg-image-right {
-    background-image: url("/static/images/city-right.jpg"); /* Sostituisci con il percorso della tua immagine */
+    background-image: url("/static/images/city-right.jpg"); 
     background-size: cover;
     background-position: center;
     height: 100vh;
 }
 
-/* Migliora font e spaziatura del contenuto */
 body {
     font-family: 'Poppins', sans-serif;
 }
