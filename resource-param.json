@@ -1,0 +1,17 @@
+{
+    "account_id": "780614560979",
+    "vpc_id": "vpc-093e4979c37c87d4d",
+    "igw_id": "igw-01399e3afa27dade5",
+    "subnet_pub_id_1": "subnet-0675206b11c2a1a47",
+    "subnet_pub_id_2": "subnet-0dbb0adda3d99812c",
+    "subnet_priv_id_1": "subnet-067878c2be194f9ad",
+    "subnet_priv_id_2": "subnet-01bd6a413669d0ede",
+    "rtb_pub_id": "rtb-01e45ff8313a59e7b",
+    "eip_alloc_id": "eipalloc-09dcfcc2784550ef7",
+    "nat_gw_id": "nat-05c1841d54ebac249",
+    "rtb_priv_id": "rtb-0ba3fcad4533e0467",
+    "pub_lb_sg_id": "sg-0b22780f3013bc0fa",
+    "prv_lb_sg_id": "sg-00cb52ed10381c75a",
+    "ec2_sg_id": "sg-00209516c7d7793c9",
+    "lambda_sg_id": "sg-0ab73342580526e0e"
+}
