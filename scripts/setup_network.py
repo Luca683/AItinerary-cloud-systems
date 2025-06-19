@@ -114,6 +114,7 @@ eip_alloc_id = eip['AllocationId']
 update_state("eip_alloc_id", eip_alloc_id)
 print(f"✅ Allocato elastic ip: {eip}, coin id: {eip_alloc_id}")
 
+print("Creazione NAT Gateway in corso...")
 nat_gw = ec2.create_nat_gateway(
     SubnetId=subnet_pub_id_1,
     AllocationId=eip_alloc_id,

@@ -22,3 +22,20 @@ echo "✅ Script s3_insert_lambda.sh eseguito con successo."
 
 python scripts/create_lambda.py
 echo "✅ Script create_lambda.py eseguito con successo."
+
+python scripts/create_API_classifica.py
+echo "✅ Script create_API_classifica.py eseguito con successo."
+
+python scripts/add_route_richiesta_itinerario.py
+echo "✅ Script add_route_richiesta_itinerario.py eseguito con successo."
+
+python scripts/add_route_risultato_itinerario.py
+echo "✅ Script add_route_risultato_itinerario.py eseguito con successo."
+
+python scripts/create_queue_richieste_ollama.py
+echo "✅ Script create_queue_richieste_ollama.py eseguito con successo."
+
+#docker
+
+python scripts/create_ECS_cluster.py
+echo "✅ Script create_ECS_cluster.py eseguito con successo."
