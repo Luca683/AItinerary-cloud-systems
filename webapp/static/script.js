@@ -18,21 +18,22 @@ form.addEventListener("submit", async function (e) {
 
     const citta = document.getElementById("citta").value;
     const giorni = document.getElementById("giorni").value;
+    const email = document.getElementById("email").value;
 
     await updateDatabase(citta);
     await getTopList();
 
-    await requestItinerary(citta, giorni);
+    await requestItinerary(citta, giorni, email);
 });
 
-async function requestItinerary(citta, giorni) {
+async function requestItinerary(citta, giorni, email) {
     try {
-        const response = await fetch("https://ls6lh1erx2.execute-api.us-east-1.amazonaws.com/prod/richiesta-itinerario", {
+        const response = await fetch("https://z1c55pmhqd.execute-api.us-east-1.amazonaws.com/prod/richiesta-itinerario", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ citta, giorni })
+            body: JSON.stringify({ citta, giorni, email })
         });
 
         if (!response.ok) throw new Error("Errore nel richiedere l'itinerario");
@@ -42,7 +43,7 @@ async function requestItinerary(citta, giorni) {
 
         const intervalId = setInterval(async () => {
             try {
-                const resultResponse = await fetch(`https://ls6lh1erx2.execute-api.us-east-1.amazonaws.com/prod/risultato-itinerario?requestId=${requestId}`);
+                const resultResponse = await fetch(`https://z1c55pmhqd.execute-api.us-east-1.amazonaws.com/prod/risultato-itinerario?requestId=${requestId}`);
                 if (!resultResponse.ok) throw new Error("Errore nel recupero risultato");
 
                 const resultData = await resultResponse.json();
@@ -75,7 +76,7 @@ async function requestItinerary(citta, giorni) {
 
 async function updateDatabase(citta) {
     try {
-        const res = await fetch("https://ls6lh1erx2.execute-api.us-east-1.amazonaws.com/prod/classifica", {
+        const res = await fetch("https://z1c55pmhqd.execute-api.us-east-1.amazonaws.com/prod/classifica", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -98,7 +99,7 @@ async function updateDatabase(citta) {
 
 async function getTopList() {
     try {
-        const res = await fetch("https://ls6lh1erx2.execute-api.us-east-1.amazonaws.com/prod/classifica");
+        const res = await fetch("https://z1c55pmhqd.execute-api.us-east-1.amazonaws.com/prod/classifica");
 
         if (!res.ok) {
             console.warn("Impossibile recuperare la classifica.");
