@@ -5,7 +5,7 @@ const risultato = document.getElementById("risultato");
 const rispostaLlm = document.getElementById("risposta-llm");
 const config_file = await fetch("/static/config.json");
 const config_json = await config_file.json();
-const apiUrl = config.API_URL;
+const apiUrl = config_json.API_URL;
 
 //✅ Carica la classifica al caricamento iniziale della pagina
 document.addEventListener("DOMContentLoaded", function () {
