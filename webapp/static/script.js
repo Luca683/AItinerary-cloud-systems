@@ -8,9 +8,9 @@ const config_json = await config_file.json();
 const apiUrl = config_json.API_URL;
 
 //✅ Carica la classifica al caricamento iniziale della pagina
-document.addEventListener("DOMContentLoaded", function () {
-    getTopList();
-});
+//document.addEventListener("DOMContentLoaded", function () {
+await getTopList();
+//});
 
 form.addEventListener("submit", async function (e) {
     e.preventDefault();
