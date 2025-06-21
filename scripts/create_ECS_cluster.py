@@ -30,7 +30,7 @@ elbv2 = boto3.client("elbv2", region_name=REGION)
 autoscaling = boto3.client("autoscaling", region_name=REGION)
 ecs = boto3.client("ecs", region_name=REGION)
 
-# 3. Load Balancer pubblico (internet-facing)
+# Load Balancer pubblico (internet-facing)
 lb = elbv2.create_load_balancer(
     Name="ecs-lb",
     Subnets=[SUBNET_PUB_ID, SUBNET_PUB_2_ID],
@@ -42,11 +42,11 @@ lb = elbv2.create_load_balancer(
 lb_arn = lb["LoadBalancers"][0]["LoadBalancerArn"]
 print("✅ Creato il load balancer pubblico")
 
-# 3b. Load Balancer privato (internal) per Ollama, porta 11434
+# Load Balancer privato (internal) per Ollama
 lb_private = elbv2.create_load_balancer(
     Name="ecs-lb-private",
     Subnets=[SUBNET_PRV_ID, SUBNET_PRV_2_ID],
-    SecurityGroups=[LB_PRV_SG],  # Assicurati che il security group permetta traffico sulla 11434
+    SecurityGroups=[LB_PRV_SG], 
     Scheme="internal",
     Type="application",
     IpAddressType="ipv4",
@@ -100,7 +100,7 @@ elbv2.create_listener(
 )
 print("✅ Creato il listener pubblico")
 
-# 4b. Target group e listener privato per Ollama (porta 11434)
+# Target group e listener privato per Ollama (porta 11434)
 tg_private_ollama = elbv2.create_target_group(
     Name="ecs-targets-private-ollama",
     Protocol="HTTP",
@@ -156,7 +156,7 @@ lt = ec2.create_launch_template(
 )
 print("✅ Creato il launch template")
 
-# 6. Auto Scaling Group
+# Auto Scaling Group
 autoscaling.create_auto_scaling_group(
     AutoScalingGroupName="ecs-asg",
     LaunchTemplate={"LaunchTemplateName": "ecs-lt"},
@@ -164,7 +164,7 @@ autoscaling.create_auto_scaling_group(
     MaxSize=3,
     DesiredCapacity=1,
     VPCZoneIdentifier= f"{SUBNET_PRV_ID},{SUBNET_PRV_2_ID}", 
-    TargetGroupARNs=[tg_arn, tg_private_ollama_arn],  # Associa entrambi i target group all'ASG
+    TargetGroupARNs=[tg_arn, tg_private_ollama_arn],
     Tags=[{"Key": "Name", "Value": "ECS Instance", "PropagateAtLaunch": True}]
 )
 

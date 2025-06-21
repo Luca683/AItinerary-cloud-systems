@@ -1,7 +1,8 @@
 set -e
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+#SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LAMBDA_DIR="$(dirname "$0")/scripts/lambda"
 # Path alla cartella lambda
-LAMBDA_DIR="$SCRIPT_DIR/lambda"
+#LAMBDA_DIR="$SCRIPT_DIR/lambda"
 
 BUCKET_NAME="my-travel-app-bucket2202"
 

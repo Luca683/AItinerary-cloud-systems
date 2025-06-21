@@ -1,5 +1,8 @@
 import boto3
+import json
+import os
 from utils.json_state import load_state, update_state
+
 state = load_state()
 
 # PARAMETRI ACCOUNT AWS
@@ -26,7 +29,7 @@ api_id = response['id']
 print(f"✅ API creata: ID = {api_id}")
 update_state('api_id', api_id)
 
-#Recupero ID della risorsa root ("/")
+# Recupero ID della risorsa root ("/")
 resources = apigw.get_resources(restApiId=api_id)
 root_id = next(item['id'] for item in resources['items'] if item['path'] == '/')
 
@@ -135,3 +138,10 @@ print(f"✅ API deployata nello stage '{STAGE_NAME}'.")
 
 # Print URL finale
 print(f"\n🌐 URL API BASE: https://{api_id}.execute-api.{REGIONE}.amazonaws.com/{STAGE_NAME}/{RESOURCE_PATH}")
+
+config_path = os.path.join(os.path.dirname(__file__), "..", "webapp", "static", "config.json")
+
+with open(config_path, "w") as f:
+    json.dump({"API_URL": f"https://{api_id}.execute-api.{REGIONE}.amazonaws.com/{STAGE_NAME}"}, f)
+
+print(f"✅ API_URL salvato in config.json")
