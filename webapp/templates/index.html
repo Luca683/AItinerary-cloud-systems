@@ -15,14 +15,20 @@
             <div class="col-md-2 d-none d-md-block px-0 bg-image-left"></div>
 
             <!-- Colonna centrale -->
-            <div class="col-md-8 py-5">
+            <div class="col-md-8 py-5 main-content">
                 <h1 class="mb-4 text-center">🧳AItinerary: scegli la città che vuoi visitare...</h1>
                 
                 <form id="itinerario-form" class="mb-4">
-                    <div class="input-group">
+                    <div class="mb-3">
                         <input type="text" id="citta" class="form-control" placeholder="Inserisci una città..." required>
+                    </div>
+                    <div class="mb-3">
                         <input type="number" id="giorni" class="form-control" placeholder="Inserisci numero di giorni di permanenza..." required>
+                    </div>
+                    <div class="mb-3">
                         <input type="email" id="email" class="form-control" placeholder="Inserisci la tua email..." required>
+                    </div>
+                    <div class="mb-3 text-center">
                         <button type="submit" class="btn btn-primary">Genera Itinerario</button>
                     </div>
                 </form>

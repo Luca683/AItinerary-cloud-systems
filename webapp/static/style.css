@@ -1,35 +1,68 @@
+/* Sfondo generale */
 body {
     background-color: #f8f9fa;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    overflow: hidden; /* Previene scroll dell'intera pagina */
 }
 
+/* Titolo */
+h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 3em;
+    color: #2c3e50;
+    text-shadow: 1px 1px 2px #ccc;
+    margin-bottom: 20px;
+}
+
+/* Testo preformattato */
 pre {
     white-space: pre-wrap;
     word-wrap: break-word;
 }
 
-h1 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 3em;
-  color: #2c3e50;
-  text-shadow: 1px 1px 2px #ccc;
-  margin-bottom: 20px;
+/* Colonna centrale scrollabile */
+.main-content {
+    margin-left: 16.6667%; /* Spazio per .col-md-2 a sinistra */
+    margin-right: 16.6667%; /* Spazio per .col-md-2 a destra */
+    height: 100vh;
+    overflow-y: auto;
+    padding: 2rem;
+    position: relative;
+    z-index: 1;
+    background-color: #f8f9fa;
 }
 
+/* Immagini laterali fisse */
+.bg-image-left, .bg-image-right {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 16.6667%; /* 2 colonne su 12 */
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+}
+
+/* Immagine sinistra */
 .bg-image-left {
-    background-image: url("/static/images/city-left.jpg"); 
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
+    left: 0;
+    background-image: url("/static/images/city-left.jpg");
 }
 
+/* Immagine destra */
 .bg-image-right {
-    background-image: url("/static/images/city-right.jpg"); 
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
+    right: 0;
+    background-image: url("/static/images/city-right.jpg");
 }
 
+/* Mobile: rimuove immagini fisse e padding */
+@media (max-width: 768px) {
+    .bg-image-left, .bg-image-right {
+        display: none;
+    }
 
-body {
-    font-family: 'Poppins', sans-serif;
+    .main-content {
+        margin: 0;
+    }
 }
