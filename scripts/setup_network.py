@@ -112,9 +112,9 @@ print(f"✅ Creata route table pubblica: {rtb_pub_id}")
 eip = ec2.allocate_address(Domain='vpc')
 eip_alloc_id = eip['AllocationId']
 update_state("eip_alloc_id", eip_alloc_id)
-print(f"✅ Allocato elastic ip: {eip}, coin id: {eip_alloc_id}")
+print(f"✅ Allocato elastic ip coin id: {eip_alloc_id}")
 
-print("Creazione NAT Gateway in corso...")
+print("🔄 Creazione NAT Gateway in corso...")
 nat_gw = ec2.create_nat_gateway(
     SubnetId=subnet_pub_id_1,
     AllocationId=eip_alloc_id,
@@ -296,7 +296,7 @@ ec2.authorize_security_group_egress( # Regola in uscita: permette traffico TCP s
     }]
 )
 
-print("\n✅ Regole dei security group configurate.")
+print("✅ Regole dei security group configurate.")
 
 # Done
-print("\n✅ Architettura rete pronta.")
+print("✅ Architettura rete pronta.")

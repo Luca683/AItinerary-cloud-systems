@@ -26,7 +26,7 @@ response = apigw.create_rest_api(
     endpointConfiguration={'types': ['REGIONAL']}
 )
 api_id = response['id']
-print(f"✅ API creata: ID = {api_id}")
+print(f"✅ API creata con ID = {api_id}")
 update_state('api_id', api_id)
 
 # Recupero ID della risorsa root ("/")
@@ -40,7 +40,7 @@ response = apigw.create_resource(
     pathPart=RESOURCE_PATH
 )
 resource_id = response['id']
-print(f"✅ Risorsa '/{RESOURCE_PATH}' creata: ID = {resource_id}")
+print(f"✅ Risorsa '/{RESOURCE_PATH}' creata con ID = {resource_id}")
 
 # Creazione metodi GET e POST con Lambda
 for method, lambda_name in [('POST', LAMBDA_POST), ('GET', LAMBDA_GET)]:
@@ -137,7 +137,7 @@ apigw.create_deployment(
 print(f"✅ API deployata nello stage '{STAGE_NAME}'.")
 
 # Print URL finale
-print(f"\n🌐 URL API BASE: https://{api_id}.execute-api.{REGIONE}.amazonaws.com/{STAGE_NAME}/{RESOURCE_PATH}")
+print(f"🌐 URL API: https://{api_id}.execute-api.{REGIONE}.amazonaws.com/{STAGE_NAME}/{RESOURCE_PATH}")
 
 config_path = os.path.join(os.path.dirname(__file__), "..", "webapp", "static", "config.json")
 

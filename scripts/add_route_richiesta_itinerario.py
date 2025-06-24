@@ -25,7 +25,7 @@ response = apigw.create_resource(
     pathPart=RESOURCE_PATH
 )
 resource_id = response['id']
-print(f"✅ Risorsa '/{RESOURCE_PATH}' creata: ID = {resource_id}")
+print(f"✅ Risorsa '/{RESOURCE_PATH}' creata con ID = {resource_id}")
 
 # Metodo POST
 apigw.put_method(
@@ -109,5 +109,5 @@ print("✅ Metodo OPTIONS configurato per CORS.")
 
 # Deploy
 apigw.create_deployment(restApiId=API_ID, stageName=STAGE_NAME)
-print(f"✅ Nuova rotta deployata nello stage '{STAGE_NAME}'.")
-print(f"🌐 URL: https://{API_ID}.execute-api.{REGIONE}.amazonaws.com/{STAGE_NAME}/{RESOURCE_PATH}")
+print(f"✅ API deployata nello stage '{STAGE_NAME}'.")
+print(f"🌐 URL API: https://{API_ID}.execute-api.{REGIONE}.amazonaws.com/{STAGE_NAME}/{RESOURCE_PATH}")

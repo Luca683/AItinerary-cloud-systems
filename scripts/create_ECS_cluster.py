@@ -40,7 +40,9 @@ lb = elbv2.create_load_balancer(
     IpAddressType="ipv4"
 )
 lb_arn = lb["LoadBalancers"][0]["LoadBalancerArn"]
+lb_dns = lb["LoadBalancers"][0]["DNSName"]
 print("✅ Creato il load balancer pubblico")
+print(f"🌐 DNS del Load Balancer pubblico: http://{lb_dns}")
 
 # Load Balancer privato (internal) per Ollama
 lb_private = elbv2.create_load_balancer(
