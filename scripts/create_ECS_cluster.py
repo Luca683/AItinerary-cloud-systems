@@ -171,10 +171,43 @@ autoscaling.create_auto_scaling_group(
 )
 
 print("✅ Creato l'Auto Scaling Group")
+asg_arn = autoscaling.describe_auto_scaling_groups(AutoScalingGroupNames=["ecs-asg"])["AutoScalingGroups"][0]["AutoScalingGroupARN"]
 
 # 7. ECS Cluster & Task
 ecs.create_cluster(clusterName=ECS_CLUSTER_NAME)
 print("✅ Creato il Cluster ECS")
+
+# Capacity Provider ECS (è una risorsa che permette di gestire in modo flessibile e automatizzato le istanza nel cluster ECS tramite l'autoscaling group collegato)
+
+ecs.create_capacity_provider(
+    name="my-capacity-provider",
+    autoScalingGroupProvider={
+        "autoScalingGroupArn": asg_arn,
+        "managedScaling": {
+            "status": "ENABLED",
+            "targetCapacity": 100,
+            "minimumScalingStepSize": 1,
+            "maximumScalingStepSize": 100,
+            "instanceWarmupPeriod": 60
+        },
+        "managedTerminationProtection": "DISABLED"
+    }
+)
+print("✅ Creato il Capacity Provider")
+
+ecs.put_cluster_capacity_providers(
+    cluster=ECS_CLUSTER_NAME,
+    capacityProviders=["my-capacity-provider"],
+    defaultCapacityProviderStrategy=[
+        {
+            "capacityProvider": "my-capacity-provider",
+            "weight": 1,
+            "base": 1
+        }
+    ]
+)
+
+print("✅ Collegato il capacity provider al cluster ECS")
 
 # Task Definition - Webapp
 ecs.register_task_definition(

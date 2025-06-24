@@ -36,7 +36,7 @@ python scripts/create_queue_richieste_ollama.py
 echo "🎉 Script create_queue_richieste_ollama.py eseguito con successo."
 
 python scripts/create_sns_topic.py
-echo "🎉 Script create_sns_topic.py eseguito con successo."
+echo "🎉 Script create_sns_topic.py  eseguito con successo."
 
 source ./scripts/create_docker_images_ecr.sh
 echo "🎉 Script create_docker_images_ecr.sh eseguito con successo."

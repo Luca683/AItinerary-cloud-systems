@@ -24,7 +24,7 @@ response = dynamodb.create_table(
     }
 )
 
-print("Creazione della tabella CityStats avviata...")
+print("🔄 Creazione della tabella CityStats avviata...")
 # Attendi che la tabella sia creata completamente
 dynamodb_resource = boto3.resource('dynamodb', region_name='us-east-1')
 table = dynamodb_resource.Table('CityStats')

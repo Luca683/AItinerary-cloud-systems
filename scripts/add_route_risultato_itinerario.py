@@ -25,7 +25,7 @@ response = apigw.create_resource(
     pathPart=RESOURCE_PATH
 )
 resource_id = response['id']
-print(f"✅ Risorsa '/{RESOURCE_PATH}' creata: ID = {resource_id}")
+print(f"✅ Risorsa '/{RESOURCE_PATH}' creata con ID = {resource_id}")
 
 # Metodo GET
 apigw.put_method(
