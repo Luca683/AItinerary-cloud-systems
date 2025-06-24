@@ -35,9 +35,10 @@ Per avviare l'applicazione quindi:
    chmod +x deploy.sh
    ./deploy.sh
    ```
+
 Una volta che lo script termina la sua esecuzione occorre attendere qualche minuto per far si che l'istanza EC2 dentro AWS venga avviata correttamente insieme ai servizi ECS che permetteranno di accedere all'applicazione e interagire con essa.
 
 # Author
-TeleSummary has been developed by Luca Strano, Computer Science student at Department of Mathematics and Computer Science, University of Catania, for the "Technologies for Advanced Programming" course.
+L'applicazione web AItinerary è stata sviluppata da Luca Strano, studente di Informatica presso il Dipartimento di Matematica e Informatica dell'Università degli Studi di Catania, per il corso di "Sistemi Cloud".
 
 Email: stranoluca469955@gmail.com
