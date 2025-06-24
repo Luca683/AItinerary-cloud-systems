@@ -11,7 +11,7 @@ e realizzare una semplice applicazione cloud-native, con l’intento di comprend
 ## Schema progetto
 ![Schema](images/Schema.jpeg)
 
-## Project setup
+## Setup Progetto
 
 ### Requisiti
 - Account AWS
@@ -36,9 +36,14 @@ Per avviare l'applicazione quindi:
    ./deploy.sh
    ```
 
-Una volta che lo script termina la sua esecuzione occorre attendere qualche minuto per far si che l'istanza EC2 dentro AWS venga avviata correttamente insieme ai servizi ECS che permetteranno di accedere all'applicazione e interagire con essa.
+Una volta che lo script termina la sua esecuzione occorre attendere qualche minuto per far si che l'istanza EC2 dentro AWS venga avviata correttamente insieme ai servizi ECS che permetteranno di accedere all'applicazione e interagire con essa tramite l'indirizzo del Load Balancer pubblico che verrà restituito in output durante
+l'esecuzione dello script. Ad esempio:
 
-# Author
+```
+🌐 DNS del Load Balancer pubblico: http://ecs-lb-378865314.us-east-1.elb.amazonaws.com
+```
+
+# Autore
 L'applicazione web AItinerary è stata sviluppata da Luca Strano, studente di Informatica presso il Dipartimento di Matematica e Informatica dell'Università degli Studi di Catania, per il corso di "Sistemi Cloud".
 
 Email: stranoluca469955@gmail.com
